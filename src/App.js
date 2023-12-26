@@ -159,7 +159,7 @@ window.addEventListener('pointerup', e => {
 })
 
 window.addEventListener('mousemove', e => {
-    // if (clicked) {
+    if (clicked) {
         const newDeltaX = Math.sign(e.x - mouseData.x) * settings.moveStep.x
 
         console.log('mousemovement')
@@ -172,11 +172,11 @@ window.addEventListener('mousemove', e => {
         deltaX = EarthObj.rotation.x + newDeltaX
 
         // model.rotation.y = EarthObj.rotation.y
-    // } else {
-        // if (model.rotation.y !== EarthObj.rotation.y) {
-            // model.rotation.y = EarthObj.rotation.y
-        // }
-    // }
+    } else {
+        if (model.rotation.y !== EarthObj.rotation.y) {
+            model.rotation.y = EarthObj.rotation.y
+        }
+    }
 });
 
 
@@ -201,9 +201,9 @@ function animate() {
     // }
 
     if (clicked) {
-        EarthObj.rotation.y = currentDeltaX * Math.PI
+        // EarthObj.rotation.y = currentDeltaX * Math.PI
 
-        // EarthObj.rotation.y = model.rotation.y + mouseData.xx * (2 * Math.PI / 360) * 4
+        EarthObj.rotation.y = model.rotation.y + mouseData.xx * (2 * Math.PI / 360) * 4
     }
 
 
