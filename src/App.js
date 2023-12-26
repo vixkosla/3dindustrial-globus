@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 var canvas, renderer, scene, camera, EarthObj
 var deltaX = 0,
@@ -10,6 +11,7 @@ var deltaX = 0,
     },
     mouseData = {
         x: 0,
+        xx: 0,
     },
     settings = {
         moveStep: {
@@ -18,8 +20,13 @@ var deltaX = 0,
         aspectRatio: 1.5,
         camera: {
             deep: 10000,
-            posY: 60,
-            posZ: 625
+            posY: 20,
+            posZ: 425
+        }
+    },
+    model = {
+        rotation: {
+            y: 0
         }
     }
 
@@ -52,8 +59,9 @@ class App {
         //obj
         EarthObj = new THREE.Object3D();
         const objLoader = new OBJLoader();
+        const gltfLoader = new GLTFLoader();
 
-        const redMaterial = new THREE.MeshPhongMaterial({
+        const redMaterial = new THREE.MeshBasicMaterial({
             color: 15017491,
             shininess: .75,
             transparent: false,
@@ -61,24 +69,24 @@ class App {
             emissiveIntensity: 1
         });
 
-        const whiteMaterial = new THREE.MeshPhongMaterial({
+        const whiteMaterial = new THREE.MeshBasicMaterial({
             color: '#cccccc'
         });
 
-        const blueMaterial = new THREE.MeshPhongMaterial({
+        const blueMaterial = new THREE.MeshBasicMaterial({
             color: '#B4523C',
         });
 
-        const lightRedMaterial = new THREE.MeshPhongMaterial({
+        const lightRedMaterial = new THREE.MeshBasicMaterial({
             color: '#918B8B',
         });
 
         // objLoader.setMaterials(materials);
-        objLoader.load('./assets/earth__f.obj', function (object) {
-            const scale = 2.2
+        objLoader.load('./assets/earth__fff.obj', function (object) {
+            const scale = 1.8
             object.scale.set(scale, scale, scale);
             object.position.set(0, 0, 0);
-            object.rotation.set(1, 3.1, 0.3);
+            object.rotation.set(0.65, 3.3, 0.3);
 
             object.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
@@ -111,6 +119,8 @@ class App {
         );
         scene.add(EarthObj)
 
+        model.rotation.y = EarthObj.rotation.y
+
         window.addEventListener('resize', onCanvasResize)
 
         animate()
@@ -135,35 +145,70 @@ function onCanvasResize() {
 let clicked = false
 
 window.addEventListener('pointerdown', e => clicked = true)
-window.addEventListener('pointercancel', e => clicked = false)
-window.addEventListener('pointerup', e => clicked = false)
+
+
+window.addEventListener('pointercancel', e => {
+    clicked = false
+    model.rotation.y = EarthObj.rotation.y
+    mouseData.xx = 0
+})
+window.addEventListener('pointerup', e => {
+    clicked = false
+    model.rotation.y = EarthObj.rotation.y
+    mouseData.xx = 0
+})
 
 window.addEventListener('mousemove', e => {
-    if (clicked) {
+    // if (clicked) {
         const newDeltaX = Math.sign(e.x - mouseData.x) * settings.moveStep.x
-        // mouseData.x = ( canvas.width / 2 ) - e.x
+
+        console.log('mousemovement')
+        console.log(e.x)
+        console.log(e.clientX)
+
+        mouseData.xx = (- e.x / window.innerWidth) * 2 + 1
         mouseData.x = e.x
-        // console.log(mouseData.x)
+        // console.log(mouseData.xx)
         deltaX = EarthObj.rotation.x + newDeltaX
-    }
+
+        // model.rotation.y = EarthObj.rotation.y
+    // } else {
+        // if (model.rotation.y !== EarthObj.rotation.y) {
+            // model.rotation.y = EarthObj.rotation.y
+        // }
+    // }
 });
 
+
 function animate() {
-    const step = .01
-    const damping = .00001
+    const step = 0.05
+    const damping = 0.00001
     // for scroll-x rotation
-    if (Math.abs(deltaX - currentDeltaX) > step) {
-        currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * step
-    } else {
-        currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * damping
-    }
+
 
     currentDeltaX = currentDeltaX + (deltaX - currentDeltaX)
-    EarthObj.rotation.y = currentDeltaX * Math.PI
+
+    // if (clicked) {
+
+        if (Math.abs(deltaX - currentDeltaX) > step) {
+            currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * step
+        } else {
+            currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * damping
+        }
+
+        // EarthObj.rotation.y = currentDeltaX * Math.PI
+        console.log(currentDeltaX)
+    // }
+
+    if (clicked) {
+        EarthObj.rotation.y = currentDeltaX * Math.PI
+
+        // EarthObj.rotation.y = model.rotation.y + mouseData.xx * (2 * Math.PI / 360) * 4
+    }
+
 
     console.log(EarthObj.rotation.y)
 
-    // EarthObj.rotation.y = mouseData.x * ( 2 * Math.PI / 360 )
     // console.log(mouseData.x)
 
     // camera.updateMatrixWorld();    
