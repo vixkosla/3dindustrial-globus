@@ -203,7 +203,7 @@ function animate() {
     if (clicked) {
         // EarthObj.rotation.y = currentDeltaX * Math.PI
 
-        EarthObj.rotation.y = model.rotation.y + mouseData.xx * (2 * Math.PI / 360) * 4
+        EarthObj.rotation.y = model.rotation.y + mouseData.xx * (2 * Math.PI / 360) * 60
     }
 
 
