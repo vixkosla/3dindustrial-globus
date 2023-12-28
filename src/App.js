@@ -12,6 +12,7 @@ var deltaX = 0,
     mouseData = {
         x: 0,
         xx: 0,
+        xxx: 0
     },
     settings = {
         moveStep: {
@@ -20,7 +21,7 @@ var deltaX = 0,
         aspectRatio: 1.5,
         camera: {
             deep: 10000,
-            posY: 20,
+            posY: 10,
             posZ: 425
         }
     },
@@ -44,6 +45,8 @@ class App {
         camera = new THREE.PerspectiveCamera(45, sceneSize.width / sceneSize.height, 0.1, settings.camera.deep);
         camera.position.y = settings.camera.posY;
         camera.position.z = settings.camera.posZ;
+
+        camera.rotation.y = Math.PI / 48
         scene.add(camera)
 
         //lights
@@ -149,24 +152,33 @@ window.addEventListener('pointerdown', e => clicked = true)
 
 window.addEventListener('pointercancel', e => {
     clicked = false
-    model.rotation.y = EarthObj.rotation.y
-    mouseData.xx = 0
+    // model.rotation.y = EarthObj.rotation.y
+    // mouseData.xx = 0
+
+    // mouseData.xxx = mouseData.xx
 })
 window.addEventListener('pointerup', e => {
     clicked = false
-    model.rotation.y = EarthObj.rotation.y
-    mouseData.xx = 0
+    // model.rotation.y = EarthObj.rotation.y
+    // mouseData.xx = 0
+
+    // mouseData.xxx = mouseData.xx
+
 })
 
 window.addEventListener('mousemove', e => {
-    if (clicked) {
+
+    let a = sceneSize.width
+
+    if (clicked && e.x < a && e.x > 0) {
+        mouseData.xx = (e.x / a) * 2 - 1
+
         const newDeltaX = Math.sign(e.x - mouseData.x) * settings.moveStep.x
 
         console.log('mousemovement')
         console.log(e.x)
         console.log(e.clientX)
 
-        mouseData.xx = (- e.x / window.innerWidth) * 2 + 1
         mouseData.x = e.x
         // console.log(mouseData.xx)
         deltaX = EarthObj.rotation.x + newDeltaX
@@ -179,35 +191,44 @@ window.addEventListener('mousemove', e => {
     }
 });
 
+let counter = 0
 
 function animate() {
     const step = 0.05
     const damping = 0.00001
     // for scroll-x rotation
 
+    counter++
+
 
     currentDeltaX = currentDeltaX + (deltaX - currentDeltaX)
 
     // if (clicked) {
 
-        if (Math.abs(deltaX - currentDeltaX) > step) {
-            currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * step
-        } else {
-            currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * damping
-        }
+    if (Math.abs(deltaX - currentDeltaX) > step) {
+        currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * step
+    } else {
+        currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * damping
+    }
 
-        // EarthObj.rotation.y = currentDeltaX * Math.PI
-        console.log(currentDeltaX)
+    // EarthObj.rotation.y = currentDeltaX * Math.PI
+    console.log(currentDeltaX)
     // }
 
     if (clicked) {
         // EarthObj.rotation.y = currentDeltaX * Math.PI
 
-        EarthObj.rotation.y = model.rotation.y + mouseData.xx * (2 * Math.PI / 360) * 60
+        EarthObj.rotation.y += (mouseData.xx - mouseData.xxx) * (2 * Math.PI / 360) * 0.5
+    }
+
+    if (5 == counter) {
+        // mouseData.xxx = mouseData.xx
+
+        counter = 0
     }
 
 
-    console.log(EarthObj.rotation.y)
+    // console.log(EarthObj.rotation.y)
 
     // console.log(mouseData.x)
 
