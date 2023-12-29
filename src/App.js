@@ -147,37 +147,40 @@ function onCanvasResize() {
 
 let clicked = false
 
-window.addEventListener('pointerdown', e => clicked = true)
+window.addEventListener('pointerdown', e => {
+    mouseData.xxx = mouseData.xx
+    clicked = true
+})
 
 
 window.addEventListener('pointercancel', e => {
+    mouseData.xxx = mouseData.xx
     clicked = false
     // model.rotation.y = EarthObj.rotation.y
     // mouseData.xx = 0
 
-    // mouseData.xxx = mouseData.xx
 })
 window.addEventListener('pointerup', e => {
+    mouseData.xxx = mouseData.xx
     clicked = false
     // model.rotation.y = EarthObj.rotation.y
     // mouseData.xx = 0
 
-    // mouseData.xxx = mouseData.xx
 
 })
 
 window.addEventListener('mousemove', e => {
 
     let a = sceneSize.width
+    mouseData.xx = (e.x / a) * 2 - 1
 
     if (clicked && e.x < a && e.x > 0) {
-        mouseData.xx = (e.x / a) * 2 - 1
 
         const newDeltaX = Math.sign(e.x - mouseData.x) * settings.moveStep.x
 
-        console.log('mousemovement')
-        console.log(e.x)
-        console.log(e.clientX)
+        // console.log('mousemovement')
+        // console.log(e.x)
+        // console.log(e.clientX)
 
         mouseData.x = e.x
         // console.log(mouseData.xx)
@@ -203,26 +206,40 @@ function animate() {
 
     currentDeltaX = currentDeltaX + (deltaX - currentDeltaX)
 
-    // if (clicked) {
+    if (clicked) {
 
-    if (Math.abs(deltaX - currentDeltaX) > step) {
-        currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * step
-    } else {
-        currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * damping
+        if (Math.abs(deltaX - currentDeltaX) > step) {
+            currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * step
+        } else {
+            currentDeltaX = currentDeltaX + (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * (deltaX - currentDeltaX) * damping
+        }
+
+        // EarthObj.rotation.y = currentDeltaX * Math.PI
+        // console.log(currentDeltaX)
     }
-
-    // EarthObj.rotation.y = currentDeltaX * Math.PI
-    console.log(currentDeltaX)
-    // }
 
     if (clicked) {
         // EarthObj.rotation.y = currentDeltaX * Math.PI
 
-        EarthObj.rotation.y += (mouseData.xx - mouseData.xxx) * (2 * Math.PI / 360) * 0.5
+        let s = 0.0075
+        let w = 0.25
+        const b = (2 * Math.PI / 360) * 0.5
+
+        console.log(mouseData.xxx)
+        console.log(mouseData.xx)
+        if (Math.abs(mouseData.xx - mouseData.xxx) > s) {
+            // EarthObj.rotation.y += (mouseData.xx - mouseData.xxx) * b
+            // } else {
+            let d = mouseData.xx - mouseData.xxx
+            let sign = d / Math.abs(d)
+
+            EarthObj.rotation.y += w * sign * b
+        }
     }
 
-    if (5 == counter) {
-        // mouseData.xxx = mouseData.xx
+    // console.log(counter)
+    if (10 == counter) {
+        mouseData.xxx = mouseData.xx
 
         counter = 0
     }
@@ -237,5 +254,6 @@ function animate() {
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
+
 
 export default App;
