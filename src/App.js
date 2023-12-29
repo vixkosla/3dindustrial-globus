@@ -21,8 +21,9 @@ var deltaX = 0,
         aspectRatio: 1.5,
         camera: {
             deep: 10000,
-            posY: 10,
-            posZ: 425
+            posY: 0,
+            posZ: 425,
+            rotY: Math.PI / 48
         }
     },
     model = {
@@ -42,11 +43,10 @@ class App {
         canvas.height = sceneSize.height;
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(45, sceneSize.width / sceneSize.height, 0.1, settings.camera.deep);
+        camera = new THREE.PerspectiveCamera(50, sceneSize.width / sceneSize.height, 0.1, settings.camera.deep);
         camera.position.y = settings.camera.posY;
         camera.position.z = settings.camera.posZ;
-
-        camera.rotation.y = Math.PI / 48
+        camera.rotation.y = settings.camera.rotY
         scene.add(camera)
 
         //lights
@@ -116,7 +116,7 @@ class App {
         }, (xhr) => {
             const loadedVal = `loaded: ${Math.floor(100.0 * xhr.loaded / xhr.total)}%`;
             console.log(loadedVal);
-            document.querySelector('.loader').innerHTML = loadedVal;
+            // document.querySelector('.loader').innerHTML = loadedVal;
         }
 
         );
@@ -141,6 +141,7 @@ function onCanvasResize() {
     camera = new THREE.PerspectiveCamera(50, sceneSize.width / sceneSize.height, 0.1, settings.camera.deep);
     camera.position.y = settings.camera.posY;
     camera.position.z = settings.camera.posZ;
+    camera.rotation.y = settings.camera.rotY
 
     renderer.setSize(sceneSize.width, sceneSize.height);
 }
