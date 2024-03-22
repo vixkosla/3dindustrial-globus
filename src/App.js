@@ -89,7 +89,7 @@ class App {
             const scale = 1.8
             object.scale.set(scale, scale, scale);
             object.position.set(0, 0, 0);
-            object.rotation.set(1.65, 3.95, 0.5);
+            object.rotation.set(1.55, 4.05, 0.5);
             // object.rotation.set(0.35, 0.65, 0.8);
 
 
