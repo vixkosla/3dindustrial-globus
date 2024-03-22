@@ -85,11 +85,13 @@ class App {
         });
 
         // objLoader.setMaterials(materials);
-        objLoader.load('./assets/earth__fff.obj', function (object) {
+        objLoader.load('./assets/earth_n_v2.obj', function (object) {
             const scale = 1.8
             object.scale.set(scale, scale, scale);
             object.position.set(0, 0, 0);
-            object.rotation.set(0.65, 3.3, 0.3);
+            object.rotation.set(1.65, 3.95, 0.5);
+            // object.rotation.set(0.35, 0.65, 0.8);
+
 
             object.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
