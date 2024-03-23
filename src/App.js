@@ -63,7 +63,7 @@ class App {
     // axis helper
 
     const axesHelper = new THREE.AxesHelper(200)
-    scene.add(axesHelper)
+    // scene.add(axesHelper)
 
     //lights
     const light = new THREE.AmbientLight(0xffffff, 1.0)
