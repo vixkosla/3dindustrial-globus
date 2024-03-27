@@ -63,7 +63,7 @@ class App {
     // axis helper
 
     const axesHelper = new THREE.AxesHelper(200)
-    // scene.add(axesHelper)
+    scene.add(axesHelper)
 
     //lights
     const light = new THREE.AmbientLight(0xffffff, 1.0)
@@ -106,14 +106,14 @@ class App {
 
     // objLoader.setMaterials(materials);
     objLoader.load(
-      './assets/earth_n_v3.obj',
+      './assets/earth_n_v5.obj',
       function (object) {
         const scale = 1.9
         // const scale = 1
 
         object.scale.set(scale, scale, scale)
         object.position.set(0, 0, 0)
-        object.rotation.set(1.5, 0, 3)
+        object.rotation.set(2.45, 2.1, 3.3)
         // object.rotation.set(0.35, 0.65, 0.8);
 
         object.traverse(function (child) {
