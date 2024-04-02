@@ -63,7 +63,7 @@ class App {
     // axis helper
 
     const axesHelper = new THREE.AxesHelper(200)
-    // scene.add(axesHelper)
+    scene.add(axesHelper)
 
     //lights
     const light = new THREE.AmbientLight(0xffffff, 1.0)
@@ -113,7 +113,7 @@ class App {
 
         object.scale.set(scale, scale, scale)
         object.position.set(0, 0, 0)
-        object.rotation.set(2.45, 2.1, 3.3)
+        // object.rotation.set(2.515, 2.1, 2.125)
         // object.rotation.set(0.35, 0.65, 0.8);
 
         object.traverse(function (child) {
@@ -141,8 +141,8 @@ class App {
       },
       xhr => {
         const loadedVal = `loaded: ${Math.floor(
-          (100.0 * xhr.loaded) / xhr.total
-        )}%`
+          (100.0 * xhr.loaded) / xhr.total)
+        }`
         console.log(loadedVal)
         // document.querySelector('.loader').innerHTML = loadedVal;
       }
